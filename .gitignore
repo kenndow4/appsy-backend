@@ -1,0 +1,60 @@
+# Build results
+bin/
+obj/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Rider
+.idea/
+
+# VS Code
+.vscode/
+
+# NuGet
+packages/
+*.nupkg
+
+# Logs
+*.log
+
+# ASP.NET Core
+appsettings.Development.json
+
+# Secrets
+secrets.json
+
+# Entity Framework
+*.dbmdl
+
+# Test Results
+TestResults/
+
+# Publish
+publish/
+
+# Azure
+.publishsettings
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# MacOS
+.DS_Store
+
+# Environment variables
+.env
+.env.*
+
+# Coverage
+coverage/
+*.coverage
+*.coveragexml
+
+# Generated files
+Generated/
