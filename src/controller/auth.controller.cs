@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 namespace appsy.src.controller;
 using appsy.src.dtos;
-
+using appsy.src.service;
 [ApiController]
 [Route("api/auth")]
 public class AuthController: ControllerBase
@@ -13,9 +13,18 @@ public class AuthController: ControllerBase
         
     }
 
-    [HttpPost("Register")]
-    public ActionResult<RegisterDto> Register([FromBody]RegisterDto registerDto)
+    private readonly AuthService _authService;
+
+    public AuthController(AuthService authService)
     {
-        return registerDto;
+        _authService = authService;
+    }
+
+    [HttpPost("register")]
+    public async Task<IActionResult> Register(RegisterDto dto)
+    {
+        var user = await _authService.Register(dto);
+
+        return Ok(user);
     }
 }
