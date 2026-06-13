@@ -1,6 +1,8 @@
 # Build results
 bin/
 obj/
+appsettings.json
+appsettings.Development.json
 
 # Visual Studio
 .vs/
@@ -8,6 +10,7 @@ obj/
 *.suo
 *.userosscache
 *.sln.docstates
+
 
 # Rider
 .idea/
