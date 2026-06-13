@@ -21,6 +21,7 @@ builder.Services.AddSingleton<IMongoDatabase>(sp =>
 });
 
 builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<IAService>();
 
 //  app
 var app = builder.Build();
