@@ -1,5 +1,7 @@
 using MongoDB.Driver;
 using appsy.src.service;
+using appsy.src.repository;
+using appsy.src.config;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,8 +22,13 @@ builder.Services.AddSingleton<IMongoDatabase>(sp =>
     return client.GetDatabase(databaseName);
 });
 
+builder.Services.AddScoped<AuthRepository>();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<IAService>();
+builder.Services.AddScoped<JwtService>();
+//JWT
+builder.Services.Configure<JwtSettings>(
+    builder.Configuration.GetSection("Jwt"));
 
 //  app
 var app = builder.Build();
@@ -31,11 +38,14 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+
+
 // Endpoint de prueba
 app.MapGet("/test-db", async (IMongoDatabase database) =>
 {
     var collections = await database.ListCollectionNames().ToListAsync();
     return Results.Ok(collections);
 });
+
 
 app.Run();
