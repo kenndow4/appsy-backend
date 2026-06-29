@@ -19,7 +19,8 @@ namespace appsy.src.dtos
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string? Id { get; set; }
+        public string Id { get; set; }=string.Empty;
+        
         [Required]
         [MinLength(3)]
         public string Name { get; set; } = string.Empty;
@@ -37,6 +38,21 @@ namespace appsy.src.dtos
 
         // public string ConfirmPassword { get; set; } = string.Empty;
     }
+
+public class UserDto
+{
+    public string Id { get; set; } = string.Empty;
+
+    public string Name { get; set; } = string.Empty;
+
+    public string Email { get; set; } = string.Empty;
+}
+public class AuthResponseDto
+{
+    public string Token { get; set; } = string.Empty;
+
+    public UserDto User { get; set; } = new();
+}
 }
 
 public class UserDto

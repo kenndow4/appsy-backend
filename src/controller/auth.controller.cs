@@ -6,25 +6,54 @@ using appsy.src.service;
 [Route("api/auth")]
 public class AuthController: ControllerBase
 {
-    [HttpPost("Login")]
-    public ActionResult<LoginDto> Login([FromBody]LoginDto loginDto)
-    {
-        return loginDto;
-        
-    }
 
-    private readonly AuthService _authService;
+ private readonly AuthService _authService;
 
     public AuthController(AuthService authService)
     {
         _authService = authService;
     }
 
+
+
+
+   
+
     [HttpPost("register")]
-    public async Task<IActionResult> Register(RegisterDto dto)
+    public async Task<IActionResult> Register([FromBody] RegisterDto dto)
     {
-        var user = await _authService.Register(dto);
+        try
+        {
+              var user = await _authService.Register(dto);
 
         return Ok(user);
+        }
+        catch (Exception ex)
+        {
+            
+        return Conflict(new
+        {
+            message = ex.Message
+        });
+        }
+      
+    }
+
+     [HttpPost("Login")]
+    public async Task<IActionResult> Login([FromBody] LoginDto dto)
+    {
+      
+   try
+   {
+  var result = await _authService.Login(dto);
+        return Ok(result);
+   }
+   catch (Exception ex )
+   {
+   return Conflict(new{
+                message = ex.Message
+            });
+   };
+        
     }
 }

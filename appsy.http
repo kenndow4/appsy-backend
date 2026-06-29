@@ -1,4 +1,4 @@
-@appsy_HostAddress = http://localhost:5160
+@appsy_HostAddress = http://localhost:5000
 
 GET {{appsy_HostAddress}}/weatherforecast/
 Accept: application/json
