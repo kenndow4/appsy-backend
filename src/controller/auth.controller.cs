@@ -1,7 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 namespace appsy.src.controller;
+using Microsoft.AspNetCore.Authorization;
 using appsy.src.dtos;
 using appsy.src.service;
+using System.Security.Claims;
+
 [ApiController]
 [Route("api/auth")]
 public class AuthController: ControllerBase
@@ -15,18 +18,37 @@ public class AuthController: ControllerBase
     }
 
 
-
-
-   
-
-    [HttpPost("register")]
-    public async Task<IActionResult> Register([FromBody] RegisterDto dto)
+    [Authorize]
+    [HttpGet("me")]
+    public async Task<ActionResult<UserDto>> GetUserById()
     {
         try
         {
-              var user = await _authService.Register(dto);
+             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-        return Ok(user);
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized(new { message = "Usuario no identificado" });
+            }
+            return await _authService.GetUserById(userId);
+            
+        }
+        catch (Exception ex)
+        {
+            return NotFound(new
+            {
+                message = ex.Message
+            });
+        }
+    }
+
+    [HttpPost("register")]
+    public async Task<ActionResult<UserDto>> Register([FromBody] RegisterDto dto)
+    {
+        try
+        {
+             return await _authService.Register(dto);
+
         }
         catch (Exception ex)
         {
