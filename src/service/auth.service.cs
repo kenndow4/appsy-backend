@@ -13,18 +13,47 @@ public AuthService (AuthRepository repository, JwtService jwtService)
          _jwtService = jwtService;
     }
    
+
+   public async Task<UserDto> GetUserById(string id)
+    {
+        var user = await _repository.GetById(id);
+        if (user == null)
+        {
+            throw new Exception("Usuario no encontrado");
+        }
+
+        return new UserDto
+        {
+            Id = user.Id,
+            Name = user.Name,
+            Email = user.Email,
+            Avatar = user.Avatar
+        };
+    }
   
     //REGISTER 
-    public async Task<RegisterDto> Register(RegisterDto dtoRegister)
+    public async Task<UserDto> Register(RegisterDto dtoRegister)
     {
         var userExist = await _repository.GetByEmail(dtoRegister.Email);
       if (userExist is not null)
 {
     throw new Exception("El correo ya está registrado");
 }   dtoRegister.Password = BCrypt.Net.BCrypt.HashPassword(dtoRegister.Password);
+     Random random = new Random();
+        string randomColor = random.Next(0x1000000).ToString("X6");
+        string randomSeed = Guid.NewGuid().ToString();
+        string avatarUrl = $"https://api.dicebear.com/9.x/adventurer-neutral/svg?seed={randomSeed}&backgroundColor={randomColor}";
+
+    dtoRegister.Avatar = avatarUrl;
     await _repository.Create(dtoRegister);
 
-        return dtoRegister;
+        return new UserDto
+        {
+            Id = dtoRegister.Id,
+            Name = dtoRegister.Name,
+            Email = dtoRegister.Email,
+            Avatar = dtoRegister.Avatar
+        };
     }
 
     //LOGIN    
@@ -48,6 +77,7 @@ return new AuthResponseDto
     {
         Id = user.Id,
         Name = user.Name,
+        Avatar = user.Avatar,
         Email = user.Email
     }
 };

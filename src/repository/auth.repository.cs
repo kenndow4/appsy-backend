@@ -13,6 +13,12 @@ public  AuthRepository( IMongoDatabase database)
         _users = database.GetCollection<RegisterDto>("users");
     }
 
+public async Task<RegisterDto?> GetById(string id)
+    {
+      return await _users.Find(x => x.Id == id).FirstOrDefaultAsync();
+
+
+    }
 public async Task<RegisterDto?> GetByEmail(string email)
     {
       return await _users.Find(x => x.Email == email).FirstOrDefaultAsync();

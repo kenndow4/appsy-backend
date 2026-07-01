@@ -21,6 +21,8 @@ namespace appsy.src.dtos
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }=string.Empty;
+
+        public string Avatar { get; set; } = string.Empty;
         
         [Required]
         [MinLength(3)]
@@ -45,6 +47,7 @@ public class UserDto
     public string Id { get; set; } = string.Empty;
 
     public string Name { get; set; } = string.Empty;
+    public string Avatar { get; set; } = string.Empty;
 
     public string Email { get; set; } = string.Empty;
 }
