@@ -1,3 +1,4 @@
+
 using System.ComponentModel.DataAnnotations;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
@@ -53,11 +54,4 @@ public class AuthResponseDto
 
     public UserDto User { get; set; } = new();
 }
-}
-
-public class UserDto
-{
-    public string Id { get; set; } = string.Empty;
-    public string Name { get; set; } = string.Empty;
-    public string Email { get; set; } = string.Empty;
 }
