@@ -1,3 +1,4 @@
+using System.Text.Json;
 using appsy.src.dtos;
 using appsy.src.service;
 using Microsoft.AspNetCore.Mvc;
@@ -13,10 +14,10 @@ public class IAController : ControllerBase
         _service = service;
     }
 
-    [HttpPost]
-    public Task<string> Consult([FromBody] IADto dto)
+    [HttpPost("{id}")]
+    public Task<object> Consult(string id, [FromBody] IADto dto)
     {
-        return _service.Consult(dto.Msg);
+        return _service.Consult(id,dto.Msg);
     }
     
 }

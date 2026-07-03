@@ -2,20 +2,16 @@ using System.Text;
 using System.Text.Json;
 namespace appsy.src.service;
 
-public class IAService
+public class IAService(IConfiguration configuration, BoardService boardService)
 {
-    private readonly HttpClient _httpClient;
-    private readonly string _apiKey;
-
-    public IAService(IConfiguration configuration)
-    {
-        _httpClient = new HttpClient();
-        _apiKey = configuration["Gemini:ApiKey"] 
+    private readonly HttpClient _httpClient = new HttpClient();
+    private readonly BoardService _boardService = boardService;
+    private readonly string _apiKey = configuration["Gemini:ApiKey"]
             ?? throw new InvalidOperationException("Gemini:ApiKey no encontrada en configuración");
-    }
 
-    public async Task<string> Consult(string userPrompt)
+    public async Task<object> Consult(string boardId,string userPrompt)
     {
+       
         var prompt = $@"
 Eres un experto en UX/UI.
 
@@ -76,7 +72,6 @@ Solicitud del usuario:
 
         var resultJson = await response.Content.ReadAsStringAsync();
         
-        // Parsear la respuesta de Gemini para extraer solo el texto generado
         using var document = JsonDocument.Parse(resultJson);
         var generatedText = document.RootElement
             .GetProperty("candidates")[0]
@@ -85,6 +80,17 @@ Solicitud del usuario:
             .GetProperty("text")
             .GetString();
 
-        return generatedText ?? string.Empty;
+
+        var parsedJson = JsonDocument.Parse(generatedText ?? "{}");
+
+var elements = parsedJson
+    .RootElement
+    .GetProperty("elements");
+
+var res = await _boardService.UpdateBoard(
+    boardId,
+    elements
+);
+        return res;
     }
 }

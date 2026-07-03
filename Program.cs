@@ -61,12 +61,15 @@ builder.Services.AddScoped(sp =>
 // --- SERVICES (The FIX for your current error) ---
 // 1. Register the Repository
 builder.Services.AddScoped<AuthRepository>();
+builder.Services.AddScoped<BoardRepository>();
 
 // 2. Register JwtService (This was missing and causing your crash!)
 builder.Services.AddScoped<JwtService>();
 
 // 3. Register AuthService (Which relies on BOTH AuthRepository and JwtService)
 builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<BoardService>();
+builder.Services.AddScoped<IAService>();
 
 // --- CORS CONFIGURATION ---
 builder.Services.AddCors(options =>
